@@ -36,32 +36,32 @@ type DataArray = Data[];
 const initialState: DataArray = [
 	{
 		personal: {
-			name: 'John Doe',
-			email: 'john.doe@example.com',
-			phone: '123-456-7890',
+			name: '',
+			email: '',
+			phone: '',
 		},
 		plan: {
-			name: 'Basic Plan',
-			price: '9.99',
-			monthly: true,
+			name: '',
+			price: '',
+			monthly: false,
 			yearly: false,
 		},
 		addOns: {
 			'Online service': {
-				selected: true,
-				price: '1.99',
+				selected: false,
+				price: '',
 			},
 			'Larger storage': {
 				selected: false,
-				price: '2.99',
+				price: '',
 			},
 			'Customizable profile': {
-				selected: true,
-				price: '0.99',
+				selected: false,
+				price: '',
 			},
 		},
-		finalPrice: 12.97,
-		complete: true,
+		finalPrice: 0,
+		complete: false,
 		'__v': 0,
 		'_id': '',
 	},

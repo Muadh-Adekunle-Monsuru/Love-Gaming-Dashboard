@@ -6,7 +6,8 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import Grid from './Grid';
 import { useEffect, useState } from 'react';
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export default function Main() {
 	const store = useSelector((state: RootState) => state.rawdata);
 	const arcadeCount = store.filter((val) => val.plan.name == 'Arcade');
@@ -14,13 +15,15 @@ export default function Main() {
 	const proCount = store.filter((val) => val.plan.name == 'Pro');
 	const dispatch = useDispatch();
 	const [enabled, setEnabled] = useState(false);
+
 	useEffect(() => {
 		setEnabled(true);
 	}, []);
 
 	const { isPending, isError } = useQuery({
 		queryKey: ['rawData'],
-		queryFn: () =>
+		queryFn: () => {
+			const toastId = toast.info('Fetching Data', { autoClose: false });
 			axios
 				.get('https://love-gaming-backend.vercel.app/orders')
 				.then((response) => {
@@ -28,12 +31,23 @@ export default function Main() {
 						'Response gotten✅, total count: ' + response.data.length
 					);
 					dispatch(addData(response.data));
+					toast.update(toastId, {
+						render: 'Data Received',
+						autoClose: 300,
+						type: 'success',
+					});
 					return response.data;
 				})
 				.catch((e) => {
 					console.log('error fetching data', e);
+					toast.update(toastId, {
+						render: 'Error Fetching Data, Try again!',
+						autoClose: 3000,
+						type: 'error',
+					});
 					throw e;
-				}),
+				});
+		},
 		enabled, // Only enable the query when `enabled` is true
 	});
 	if (isPending) {
@@ -70,6 +84,7 @@ export default function Main() {
 			<div>
 				<Grid />
 			</div>
+			<ToastContainer />
 		</section>
 	);
 }
